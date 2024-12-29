@@ -6,8 +6,8 @@ import {sign} from "hono/jwt"
 
 const app = new Hono<{
   Bindings:{
-    DATABASE_URL: string
-    JWT_SECRET: string
+    DATABASE_URL: string;
+    JWT_SECRET: string;
   }
 }>()
 
@@ -28,7 +28,7 @@ app.post('/api/v1/signup', async (c) => {
     },
   });
 
-  const token = await sign({ id: user.id },"secret")
+  const token = await sign({ id: user.id }, c.env.JWT_SECRET)
   console.log(token)
 
   return c.json({
@@ -56,19 +56,8 @@ app.post('/api/v1/signin', async (c) => {
     
   }
 
-  const user = await prisma.user.create({
-    data: {
-      email: body.email,
-      password: body.password,
-    },
-  });
-
-  const token = await sign({ id: user.id },"secret")
-  console.log(token)
-
-  return c.json({
-    jwt: token
-  })
+  const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
+    return c.json({ jwt });
 })
 
 
