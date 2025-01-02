@@ -3,7 +3,7 @@ main = "src/index.ts"
 compatibility_date = "2024-12-29"
 
  [vars]
-DATABASE_URL=""
+DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiOGZiOTgwMjMtZmFmMy00ZWNhLTkzNGMtY2IzMjNhM2Y1NGRiIiwidGVuYW50X2lkIjoiMGU5OTMzNDM1OWIyMzJkZWY4NzBiNjQ1Y2Q1MjgxNjA3ZjEzZTMzZTA3YzI3N2VhNDkzYzRkMWJlZTlmYzYyZiIsImludGVybmFsX3NlY3JldCI6IjNjMTRjNmM0LTk2NDYtNDY4YS1iYjkwLWJiZGI0OWJjMmVmZSJ9.cWZNXTJ59x1PIBuatMzgRTdy0qfkzs-UXtluk9t6uE8"
 
-JWT_SECRET = ""
+JWT_SECRET = "joontoken"
 
