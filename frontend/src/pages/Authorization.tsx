@@ -1,21 +1,34 @@
-'use client'
-
-import React, { ChangeEvent, ChangeEventHandler, useState } from 'react';
+import  { ChangeEvent, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { PenTool, Mail, Lock, ArrowRight, User } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { PenTool, ArrowRight, User } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { SignupInput } from "@karan901/algoarena-common"
+import axios from 'axios'
+import { BACKEND_URL } from '@/config';
 
-
-export default function SignUp({type} : {type : "signin" | "signup"}) {
+export default function Authorization({type} : {type : "signin" | "signup"}) {
+  const navigate = useNavigate()
   const [postInputs, setPostInputs] = useState<SignupInput>({
     name : "",
     username : "",
     password : ""
   })
+
+  async function sendRequest (){
+    try{
+      const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin" }`, postInputs)
+      const jwt = response.data
+      localStorage.setItem("token", jwt)
+      navigate("/blogs")
+    }catch(e){
+      console.log("Error :" + e)
+      alert("Request Failed")
+    }
+    
+  }
 
   // const handleSubmit = (e: React.FormEvent) => {
   //   e.preventDefault();
@@ -30,18 +43,20 @@ export default function SignUp({type} : {type : "signin" | "signup"}) {
             <div className="mx-auto bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center">
               <PenTool className="w-6 h-6 text-purple-600" />
             </div>
-            <CardTitle className="text-2xl font-bold text-purple-800">Start Your Blog Journey</CardTitle>
+            <CardTitle className="text-2xl font-bold text-purple-800">
+              {type === "signup" ? "Start Your Blog Journey" : "Welcome Back, Blogger"}
+            </CardTitle>
             <CardDescription className="text-purple-600">
-              Join our community of passionate writers
+              {type === "signup" ? "Join our community of passionate writers" : "Sign in to continue your writing journey"}
             </CardDescription>
           </CardHeader>
           <CardContent className='space-y-6 '>
-            <LabelledInput label="Name" placeholder='Karan Kendre...' onChange={(e) =>{
+           { type === "signin" ? "" : <LabelledInput label="Name" placeholder='Karan Kendre...' onChange={(e) =>{
                 setPostInputs ({
                   ...postInputs,
                   name : e.target.value
                 })
-            }} />
+            }} />}
 
             <LabelledInput label="username" placeholder='karakendre@gmail.com...' onChange={(e) =>{
                 setPostInputs ({
@@ -57,7 +72,7 @@ export default function SignUp({type} : {type : "signin" | "signup"}) {
                 })
             }} />
 
-            <Button type="submit" className="w-full h-12 text-base flex items-center justify-center space-x-2 bg-purple-600 hover:bg-purple-700">
+            <Button type="submit" onClick={sendRequest} className="w-full h-12 text-base flex items-center justify-center space-x-2 bg-purple-600 hover:bg-purple-700">
                   <span>Start Blogging</span>
                   <ArrowRight className="w-5 h-5" />
             </Button>
@@ -67,7 +82,7 @@ export default function SignUp({type} : {type : "signin" | "signup"}) {
               { type === "signin" ? "Don't Have an account? " : "Already have a Account? " }
               <Link to={type === "signin" ? "/signup" : "/signin"}  
               className="text-purple-800 hover:underline font-medium">
-                {type === "signin" ? "Sign In" : "Sign up"}  
+                {type === "signin" ? "Sign up" : "Sign in"}  
               </Link>
             </div>
           </CardFooter>
