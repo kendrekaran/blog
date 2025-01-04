@@ -5,7 +5,7 @@ const Blogs = () => {
   return (
     <div>
         <BlogCard 
-            authorName={"Karan Kendre"}
+            authorName={"Karan"}
             title ={"Title of the Blog"}
             content={"Content of th Blog"}
             publishedDate={"11/11/1111"}
