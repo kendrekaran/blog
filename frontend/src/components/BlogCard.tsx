@@ -14,18 +14,20 @@ const BlogCard = ({
 } : BlogCardProps
 ) => {
   return (
-    <div className="p-10 flex items-center flex-col justify-center h-screen">
-        <div>
-            <Avatar name={authorName} /> {authorName} . {publishedDate}
-        </div>
-        <div>
-            {title}
-        </div>
-        <div>
-            {content.slice(0,100) + "..."}
-        </div>
-        <div>
-            {`${Math.ceil(content.length/100)} minutes`}
+    <div className="flex items-center justify-center">
+        <div className="p-10 flex items-start flex-col justify-center ">
+            <div>
+                <Avatar name={authorName} /> {authorName} . {publishedDate}
+            </div>
+            <div>
+                {title}
+            </div>
+            <div>
+                {content.slice(0,100) + "..."}
+            </div>
+            <div>
+                {`${Math.ceil(content.length/100)} minutes`}
+            </div>
         </div>
     </div>
   )

@@ -1,17 +1,24 @@
 import BlogCard from '@/components/BlogCard'
+import useBlogs from '@/hook'
 
-const Blogs = () => {
+const Blogs = () => { 
     const {loading, blogs} = useBlogs()
-  return (
-    <div>
-        <BlogCard 
-            authorName={"Karan Kendre"}
-            title ={"Title of the Blog"}
-            content={"Content of th Blog"}
+    
+    if(loading) {
+      return <div>loading...</div>
+    }
+
+    return (
+      <div>
+         {blogs.map(blog => <BlogCard 
+            authorName={blog.author.name || ""}
+            title ={blog.title}
+            content={blog.content}
             publishedDate={"11/11/1111"}
             />
-    </div>
-  )
+         )}
+      </div>
+    )
 }
 
 export default Blogs

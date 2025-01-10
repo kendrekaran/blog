@@ -1,4 +1,4 @@
-import  { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,31 +9,42 @@ import { SignupInput } from "@karan901/algoarena-common"
 import axios from 'axios'
 import { BACKEND_URL } from '@/config';
 
+// Define the response type
+interface AuthResponse {
+  jwt: string;
+}
+
 export default function Authorization({type} : {type : "signin" | "signup"}) {
   const navigate = useNavigate()
   const [postInputs, setPostInputs] = useState<SignupInput>({
-    name : "",
-    username : "",
-    password : ""
+    name: "",
+    username: "",
+    password: ""
   })
 
-  async function sendRequest (){
-    try{
-      const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin" }`, postInputs)
-      const jwt = response.data
-      localStorage.setItem("token", jwt)
-      navigate("/blogs")
-    }catch(e){
-      console.log("Error :" + e)
-      alert("Request Failed")
+  async function sendRequest() {
+    try {
+      const response = await axios.post<AuthResponse>(
+        `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, 
+        postInputs
+      );
+      
+      // Extract the JWT token from the jwt property
+      const jwt = response.data.jwt;
+      
+      if (jwt) {
+        localStorage.setItem("token", jwt);
+        navigate("/blogs");
+      } else {
+        console.error("No JWT token found in response:", response.data);
+        alert("Authentication failed: No token received");
+      }
+    } catch (e) {
+      console.error("Authentication error:", e);
+      alert(e.response?.data?.message || "Authentication failed");
     }
-    
   }
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   console.log('Sign up:', { username, email, password });
-  // };
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-purple-50 to-purple-100">
